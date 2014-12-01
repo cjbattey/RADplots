@@ -2,6 +2,7 @@
 ### Input is a phylip formatted alignment like pyRAD's .phy and .unlinked_snps output, but NOT the .snp output b/c of the extra spaces bw each loci's SNP's
 ### Note: this function is pretty slow (~2 min for 20,000 SNP alignment). Would be way faster without the for loop. 
 
+
 mdPlot <- function(file) {
   require(ggplot2);require(reshape);require(plyr)
   data <- read.table(file,header=TRUE)
