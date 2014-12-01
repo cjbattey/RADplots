@@ -14,6 +14,7 @@
 #14	5953614
 #Z	322701
 
+
 chromePlot <- function(snp,chrome){
   require(ggplot2);require(plyr)
   a <- read.table(snp,header=TRUE)
