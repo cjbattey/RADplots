@@ -6,7 +6,6 @@
 ##NOTE: Possible problem with some loci for which pyRAD does not chop off the last base of the cut site - unclear why this is, but
 ##it results in an extra nucleotide when adding back on the complete cut site and will produce a gap in reference alignments. 
 ##Working on solutions.
-
 loci2blat <- function(infile,outfile,cutsite){
 lociLines <- readLines(infile)
 endMarks <- grep("//",lociLines)
