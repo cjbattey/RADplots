@@ -4,16 +4,14 @@
 
 mdPlot <- function(file) {
   require(ggplot2);require(reshape);require(plyr)
-  data <- read.table(file,header=TRUE)
+  data <- read.table("~/Dropbox/vRAD3/pyRAD/outfiles/c19h4.unlinked_snps",header=TRUE)
   colnames(data) <- c("sample","sequence")
   data$sequence <- as.character(data$sequence)
   data <- data.frame(colsplit(data$sequence,split="",names=c(1:nchar(data$sequence[1]))),row.names=data$sample)
   samples <- c(rownames(data))
   missingData <- c()
   for(i in 1:nrow(data)) {
-    a <- data[i,]
-    a <- a[which(a == "N" | a == "?" | a == "-")]
-    b <- length(a)
+    b <- length(which(data[i,] == "N"))
     missingData <- append(missingData,b)
   }
   md <- data.frame(samples,missingData)
