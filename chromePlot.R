@@ -1,7 +1,9 @@
 ################## chromePlot: plot SNP locations on chromosomes with ggplot2 ######################
 
 #need two files - one to list chromosome # and length, one to list SNP chromosome and position
-#the "chrome" file is tab-delimited with headers "ID" (name for each chromosome) and "Size" (in base pairs);
+#the "chrome" file is tab-delimited with headers "ID" (name for each chromosome) and "Size" (in base pairs). The "snp" file
+#is also tab-delimited with columns "ID" (chromosome name - must match chrome file) and 
+#"POS" (position in base pairs on chromosome - typically the beginnig, end, or middle of a BLAST/BLAT hit);
 #Example "chrome" file: 
 #ID	Size
 #1	118548696
@@ -9,10 +11,10 @@
 #1B	1083483
 #snps is tab-delimited with headers "CHR" and "POS"
 #Example "snp" file: 
-#CHR	POS
-#24	2454162
-#14	5953614
-#Z	322701
+#ID	POS
+#1	2454162
+#1	5953614
+#1A	322701
 
 
 chromePlot <- function(snp,chrome){
@@ -24,5 +26,5 @@ chromePlot <- function(snp,chrome){
   ggplot(data=b,aes(x=ID,y=Size))+theme_bw()+xlab("Chromosome")+ylab("SNP Position")+
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
           axis.text.y = element_blank(),axis.ticks.y = element_blank())+
-    geom_bar(stat="identity",fill='grey')+geom_point(data=a,aes(x=CHR,y=POS),col="red",size=11,shape="-")
+    geom_bar(stat="identity",fill='grey')+geom_point(data=a,aes(x=ID,y=POS),col="red",size=11,shape="-")
 }
