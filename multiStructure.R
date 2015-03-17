@@ -1,7 +1,8 @@
 ##Function to write shell scripts for executing parallel runs of the program STRUCTURE. 
 ##File paths can be complete or from the working diretory you intend to use. 
-##structureCommand is the command to run structure - either the path to the structure.bin file (it's in the .app - right click and go to show contents on a Mac to find it)
-##Output will n shell scripts saved to your working directory, where n is the number of threads.
+##structureCommand is the command to run structure - either the path to the 
+#structure.bin file (it's in the .app - right click and go to show contents on a Mac to find it), or just "structure" if you have it in /usr/bin
+##Output will be n shell scripts saved to your working directory, where n is the number of threads.
 ##
 ##To run these, just open a separate terminal window for each thread and run one shell script per terminal window. 
 ##Note that you'll also need to run <chmod +x shellscript.sh> to make the scripts executable before running them. 
