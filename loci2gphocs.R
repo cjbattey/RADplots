@@ -6,7 +6,7 @@
 #write(output,"pathToOutputFileLocation")
 
 loci2gphocs <- function(infile){
-  infile <- readLines(infile)
+  loci <- readLines(infile)
   a <- grep("//",loci)
   j <- 1
   output <- c(paste(length(a)),"")
