@@ -1,4 +1,7 @@
-##Function to write shell scripts for executing parallel runs of the program STRUCTURE. 
+## Obsolete vis-a-viz slagerThreader.py - faster to copy/paste a shell script together since you have to prep all the params files too
+## Would be worthwhile to package everything into an R function(?), but # of options would be nuts
+
+#Function to write shell scripts for executing parallel runs of the program STRUCTURE. 
 ##File paths can be complete or from the working diretory you intend to use. 
 ##structureCommand is the command to run structure - either the path to the 
 #structure.bin file (it's in the .app - right click and go to show contents on a Mac to find it), or just "structure" if you have it in /usr/bin
