@@ -1,5 +1,4 @@
-## Obsolete vis-a-viz slagerThreader.py - faster to copy/paste a shell script together since you have to prep all the params files too
-## Would be worthwhile to package everything into an R function(?), but # of options would be nuts
+## Obsolete vis-a-viz slagerThreader.py - probably faster to copy/paste a shell script together.
 
 #Function to write shell scripts for executing parallel runs of the program STRUCTURE. 
 ##File paths can be complete or from the working diretory you intend to use. 
