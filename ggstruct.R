@@ -1,4 +1,6 @@
 ################################ ggStruct: structure visualization with ggplot2 ####################################
+## switched to structurePlot.R - better color matching and ordering options with base graphics and minimal input. 
+
 ##run with < ggstruct("path to str output","path to str input",n.samples,vector of colors,k) >
 ##structure input file must include putative population origin in second column and have each individual on 2 rows
 ##plots will always be in the order of the structure data file (L to R for top to bottom)
