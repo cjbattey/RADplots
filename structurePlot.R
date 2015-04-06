@@ -1,20 +1,20 @@
 ########## structurePlot: an R function for plotting Structure output
-##Required input: structure output file
-##options: colors = vector of at least k colors. Default has max 8 colors. 
-##         pop.order = FALSE (default) plots in order of structure input file
-##         pop.order = TRUE plots in order of populations as in structure input file optional column "putative pop info"
-##         pop.info = TRUE/FALSE for presence of column of putative pop info. Defaults to TRUE, required if FALSE. 
-##         spacing = Amount of white space left bw bars, as a fraction of bar width. Defaults to 0. R doesn't seem to do well with less than 0.2. 
-##         outline = color used for outline of every bar (default is black). For no outline set to NA. 
+##Required input: path to structure output file (ending in "_f")
+##                pop.info = TRUE/FALSE for presence of column of putative pop info in structure input. Defaults to TRUE.
 ##
-##experimental: color.matching = TRUE will attach colors to putative populations (requires pop.info=TRUE) for consistent 
+##optional input: colors = vector of at least k colors. Required if k > 8.
+##                pop.order = TRUE plots in order of populations as in structure input file optional column "putative pop info" 
+##                spacing = Amount of white space left between bars, as a fraction of bar width. Defaults to 0.2. 
+##                outline = color used for outline of bars (default is NA). Recommended when spacing=0. 
+##
+##experimental:   color.matching = TRUE will attach colors to putative populations (requires pop.info=TRUE) for consistent 
 ##plotting across multiple runs. The cluster attached to a given putative population is taken to be that with the highest 
 ##average ancestry across all individuals in that population. Works with my data but there are probably still bugs in here. 
-##If color.matching=TRUE, user-specified colors are assigned by population # - first color in the vector for pop 1, second for pop 2, etc.
+##If color.matching=TRUE, user-specified colors are assigned by population number - first color in the vector for pop 1, second for pop 2, etc.
 ##
-##For additional control over plotting (line width, spacing, etc), see ?barplot and modify the relevant barplot call in the function
+##To make plots that look like the standard STRUCTURE plots from the GUI, set spacing=0 and outline='black'
 
-structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold","forestgreen","magenta3","orangered","cornflowerblue","orange","sienna","dodgerblue4"),color.matching=FALSE,spacing=0,outline='black') {
+structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold","forestgreen","magenta3","orangered","cornflowerblue","orange","sienna","dodgerblue4"),color.matching=FALSE,spacing=0.2,outline=NA) {
   require(plyr);require(reshape)
   infile <- readLines(strOutput,warn=FALSE)
   a <- grep("Inferred ancestry of individuals:",infile)+2
@@ -54,7 +54,8 @@ structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold
     barplot(t(as.matrix(df[3:(2+k)])),axes=FALSE,col=colors,border=outline,names=df$sample,cex.names=0.75,las=2,main=lnml,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
   }
     barplot(t(as.matrix(df[3:(2+k)])),axes=FALSE,col=colors,border=outline,names=df$sample,cex.names=0.75,las=2,main=lnml,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
-  if (pop.info=="FALSE"){
+  }
+  else {
     df <- data.frame(df[3],df[6:(5+k)])
     colnames(df) <- c("sample",1:k)
     n.pops <- k
@@ -63,7 +64,7 @@ structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold
     df <- df[,!(names(df)) %in% sample]
     barplot(t(as.matrix(df)),axes=FALSE,col=colors,border=outline,names=names,cex.names=0.75,las=2,main=lnml,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
   }
-  } 
-}
+} 
+
 
 
