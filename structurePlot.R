@@ -54,7 +54,6 @@ structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold
   else {
     colnames(df) <- c("sample","percent.missing","X",1:k)
     a <- df[4:ncol(df)]
-    barplot(t(a),axes=FALSE,col=colors,border=outline,names=df$sample,cex.names=cex,las=2,main=lnml,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
     n.pops <- k
     names <- df$sample
     barplot(t(a),axes=FALSE,col=colors,border=outline,names=names,cex.names=cex,las=2,main=lnml,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
