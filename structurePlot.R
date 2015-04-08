@@ -4,8 +4,8 @@
 ##
 ##optional input: colors = vector of at least k colors. Required if k > 8.
 ##                pop.order = TRUE plots in order of populations as in structure input file optional column "putative pop info" 
-##                spacing = Amount of white space left between bars, as a fraction of bar width. Defaults to 0.2. 
-##                outline = color used for outline of bars (default is NA). Recommended when spacing=0. 
+##                spacing = Amount of white space left between bars, as a fraction of bar width. Defaults to 0. 
+##                outline = color used for outline of bars (default is white).
 ##                cex=font scaling for labels. defaults to 0.75.
 ##
 ##experimental:   color.matching = TRUE will attach colors to putative populations (requires pop.info=TRUE) for consistent 
@@ -17,7 +17,7 @@
 #c("gold","forestgreen","magenta3","orangered","cornflowerblue","orange","sienna","dodgerblue4")
 #c(colors=brewer.pal(12,"Set3"))
 
-structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold","forestgreen","magenta3","orangered","cornflowerblue","orange","sienna","dodgerblue4"),color.matching=FALSE,spacing=0.2,outline=NA,cex=0.75) {
+structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold","forestgreen","magenta3","orangered","cornflowerblue","orange","sienna","dodgerblue4"),color.matching=FALSE,spacing=0,outline='white',cex=0.75) {
   require(plyr);require(reshape);require(RColorBrewer)
   infile <- readLines(strOutput,warn=FALSE)
   a <- grep("Inferred ancestry of individuals:",infile)+2
