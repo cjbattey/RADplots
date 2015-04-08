@@ -34,7 +34,7 @@ structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold
     palette <- c(rep("NA",k))
     for(i in 1:n.pops){
       d <- subset(df,pop==i)
-      e <- colMeans(df[5:ncol(df)])
+      e <- colMeans(d[5:ncol(d)])
       f <- as.numeric(names(e[which(e==max(e))]))
       if (palette[f] == "NA"){
         palette[f] <- colors[i]
