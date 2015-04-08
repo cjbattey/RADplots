@@ -1,11 +1,11 @@
-#########################################################subsetLoci.R##############################################################
-###############################EXPERIMENTAL/may be full of errors. See especially line 21 and please tell me how to fix that##
+#SubsetLoci.R
+#still some bugs - see line 21##
 
-################ Script to align RAD loci against a reference genome (via BLAT), 
-################ subset for loci matching a selected chromosome (or chromosomes)
-################ and produce a new alignment of only those loci.
-################ Filters for blat hits are in the block beginning "#get an index of the locus # for z-chromosome loci"
-################ Need pyRAD outfiles including one .phy-formatted file and the .loci format. Currently set up to work with sbf1 cut site RAD data. 
+# Script to align RAD loci against a reference genome (via BLAT), 
+# subset for loci matching a selected chromosome (or chromosomes)
+# and produce a new alignment of only those loci.
+# Filters for blat hits are in the block beginning "#get an index of the locus # for z-chromosome loci"
+# Need pyRAD outfiles including one .phy-formatted file and the .loci format. Currently set up to work with sbf1 cut site RAD data. 
 
 library(ggplot2);library(plyr)
 setwd("/Users/fencelizard/Dropbox/vRAD3/")
