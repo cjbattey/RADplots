@@ -10,10 +10,13 @@ shell <- c()
         randseed <- as.integer(runif(1,min=1,max=1000000))
         command <- paste("structure"," -m ",paste("./mainparams","_k",i,sep="")," -D ",
                          paste(randseed)," -o ",paste("./output/k",i,"_run",j,sep="")," > ",
-                         paste("./output/k",i,"_run",j,".log",sep=""),"\n",sep="")
+                         paste("./output/k",i,"_run",j,".log",sep=""),sep="")
         shell <- append(shell,command)
       }
     }
-
+shell <- append(c("#!/bin/sh"),shell)
 write(shell,"structure.sh")
     
+
+
+
