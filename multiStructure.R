@@ -11,6 +11,7 @@ shell <- c()
         command <- paste("structure"," -m ",paste("./mainparams","_k",i,sep="")," -D ",
                          paste(randseed)," -o ",paste("./output/k",i,"_run",j,sep="")," > ",
 <<<<<<< HEAD
+<<<<<<< HEAD
                          paste("./output/k",i,"_run",j,".log",sep=""),sep="")
         shell <- append(shell,command)
       }
@@ -27,5 +28,15 @@ write(shell,"structure.sh")
     }
 >>>>>>> 2bb06d81dcfb03e1525d1404c62090c12e63915a
 
+=======
+                         paste("./output/k",i,"_run",j,".log",sep=""),sep="")
+        shell <- append(shell,command)
+      }
+    }
+shell <- append(c("#!/bin/sh"),shell)
+>>>>>>> aeebc34d3720f86373cc41e7341b241969119a6d
 write(shell,"structure.sh")
     
+
+
+
