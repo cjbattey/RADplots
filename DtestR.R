@@ -36,7 +36,8 @@ for(b in 1:5){
 setwd("~/Dropbox/vRAD3/phylo.analyses/Dtest/")
 writeLines(command,"Dtest_allOuts.txt")
 
-##reading in and calculating mean/range D & Z values, number of comparisons, for each test (ie each species pairing in p1+p2 vs p3)
+##summarizing output: 
+#trim sample names to taxa names & paste together to make unique test id's (test = unique combination of taxa in p1/2+p3) 
 df <- read.delim("output/out.D4.txt")
 df$p1sp <- as.factor(gsub("\\[","",sapply(strsplit(as.character(df$P1),"_"),"[[",1)))
 df$p2sp <- as.factor(gsub("\\[","",sapply(strsplit(as.character(df$P2),"_"),"[[",1)))
@@ -44,9 +45,11 @@ df$p3sp <- as.factor(gsub("\\[","",sapply(strsplit(as.character(df$P3),"_"),"[["
 df$Osp <- as.factor(gsub("\\[","",sapply(strsplit(as.character(df$O),"_"),"[[",1)))
 df$test <- as.factor(paste(df$p1sp,df$p2sp,df$p3sp,df$Osp))
 
+#empty table to record summary stats
 table <- data.frame(test=character(),n.loci=numeric(),p.disc=numeric(),D.range=character(),Z.range=character(),
                     sig.permut=character())
 
+#loop over tests. Get min/max D & Z, average number of loci, average percent discordant loci, & number of significant tests.
 for (i in levels(df$test)){
   a <- subset(df,test==i)
   test <- as.character(a$test[1])
@@ -57,16 +60,18 @@ for (i in levels(df$test)){
   Zmax <- max(a$Z)
   Z.range <- paste("(",Zmin,",",Zmax,")",sep="")
   n.permut <- nrow(a)
+  #convert Z to p value, apply holm-bonferroni correction (n comparisons = n sample combinations per test)
   a$p.uncorrected <- 1-pnorm(a$Z)
-  a$p.corrected <- p.adjust(a$p.uncorrected,method="holm",n=length(a$p.uncorrected))
+  a$p.corrected <- p.adjust(a$p.uncorrected,method="holm")
+  #find number of significant sample permutations out of total permutations. Note numeric below gives one-tailed p value cutoff. 
   sig.permut <- nrow(a[which(a$p.corrected < 0.005),])
   sig.fraction <- paste(sig.permut,"/",n.permut,sep="")
   n.loci <- mean(a$nloci)
   p.disc <- mean(a$pdisc)
-  #sig.permut <- nrow(a[which(a$Z > qnorm((0.025/n.permut),lower.tail=FALSE)),])
   b <- data.frame(test,n.loci,p.disc,D.range,Z.range,sig.fraction)
   table <- rbind(table,b)
 }
 
+##output/write to file
 table <- cbind(colsplit(table$test," ",names=c("P1","P2","P3","P4")),table[2:6])
-table$test <- paste(table$P1,"<-",table$P3)
+#write.table(table,"D_out.txt",sep="\t")
