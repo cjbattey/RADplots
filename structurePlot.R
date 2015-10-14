@@ -10,10 +10,11 @@
 ##
 ##experimental:   color.matching = TRUE will attach colors to putative populations (requires pop.info=TRUE) for consistent 
 ##plotting across multiple runs. The cluster attached to a given putative population is taken to be that with the highest 
-##average ancestry across all individuals in that population. Works with my data but there are probably still bugs in here. 
+##average ancestry across all individuals in that population. 
 ##If color.matching=TRUE, user-specified colors are assigned by population number - first color in the vector for pop 1, second for pop 2, etc.
 ##
 ##To make plots that look like the standard STRUCTURE plots from the GUI, set spacing=0 and outline='black'
+#good colors: 
 #c("gold","forestgreen","magenta3","orangered","cornflowerblue","orange","sienna","dodgerblue4")
 #c(colors=brewer.pal(12,"Set3"))
 
