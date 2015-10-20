@@ -9,7 +9,7 @@
 ##                cex=font scaling for labels. defaults to 0.75.
 ##
 ##experimental:   color.matching = TRUE will attach colors to putative populations (requires pop.info=TRUE) for consistent 
-##plotting across multiple runs. The cluster attached to a given putative population is taken to be that with the highest 
+##plotting across multiple runs. The cluster attached to a given population is taken to be that with the highest 
 ##average ancestry across all individuals in that population. 
 ##If color.matching=TRUE, user-specified colors are assigned by population number - first color in the vector for pop 1, second for pop 2, etc.
 ##
