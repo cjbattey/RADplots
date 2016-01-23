@@ -1,26 +1,16 @@
-### plot missing data by sample across an alignment, as well as total missing data ###
-### Input is a phylip formatted alignment like pyRAD's .phy and .unlinked_snps output, but NOT the .snp output b/c of the extra spaces bw each loci's SNP's
-### Note: this function is pretty slow (~2 min for 20,000 SNP alignment). Would be way faster without the for loop. 
+###Plot % missing data in a phylip file###
 
-mdPlot <- function(file) {
-  require(ggplot2);require(reshape);require(plyr)
-  data <- read.table("~/Dropbox/vRAD3/pyRAD/outfiles/c19h4.unlinked_snps",header=TRUE)
-  colnames(data) <- c("sample","sequence")
-  data$sequence <- as.character(data$sequence)
-  data <- data.frame(colsplit(data$sequence,split="",names=c(1:nchar(data$sequence[1]))),row.names=data$sample)
-  samples <- c(rownames(data))
-  missingData <- c()
-  for(i in 1:nrow(data)) {
-    b <- length(which(data[i,] == "N"))
-    missingData <- append(missingData,b)
+mdPlot <- function(file,arrange=T){
+    require(data.table);require(stringr);require(plyr)
+  a <- fread(file,header=T)
+  nchar <- as.numeric(names(a)[2])
+  colnames(a) <- c("sample","seq")
+  b <- lapply(a$seq,FUN=function(e) str_count(e,"N"))
+  c <- as.numeric(b)/nchar
+  d <- data.frame(sample=a$sample,md=c)
+  if(arrange==F){
+  barplot(d$md,names.arg=d$sample,las=2,cex.names=0.75,ylim=c(0,1))
   }
-  md <- data.frame(samples,missingData)
-  md$missingData <- 100*(md$missingData/length(data))
-  md <- arrange(md,desc(md$missingData))
-  md$samples <- reorder(md$samples,desc(md$missingData))
-  totalMD <- 100*(sum(missingData)/(length(data)*nrow(data)))
-  ggplot(data=md,aes(x=samples,y=missingData))+theme_bw()+xlab(NULL)+ylab("% Missing Data")+
-    theme(axis.text.x=element_text(angle=90,hjust=1.0,vjust=0.5))+
-    geom_bar(stat="identity")+geom_hline(y=totalMD,col="red")+
-    annotate(geom="text",label="Total Missing Data",col="red",y=totalMD+0.08,x=0.98*length(md$samples),cex=4)+coord_flip()
+    d <- arrange(d,md)
+    barplot(d$md,names.arg=d$sample,las=2,cex.names=0.75,ylim=c(0,1))
 }
