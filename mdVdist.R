@@ -1,10 +1,9 @@
 #mdVdist tests for a correlation bw missing data and genetic distance using a mantel test
 #run time is proportional to the number of characters in each sequence... wouldnt recommend w/seqs > 100kbp. 
-#to do: speed up pairwise md calc's with Biostrings package - strsplit+gsub too slow for long seqs.
-#(also foreach(?) other way to get the pairwise N's? shooting for 1mbp in <1s...)
+#to do: speed up pairwise md calc's with Biostrings package - strsplit+gsub too slow for long seqs
 
 mdVdist <- function(file,nperm=1000,verbose=T,plot=T){
-    require(data.table);require(ape);require(ade4)
+  require(data.table);require(ape);require(ade4)
   a <- data.frame(fread(file,header=T)) #read in sequences as a table
   names(a) <- gsub("X","",names(a)) #extract header info
   nchar <- as.numeric(names(a)[2]) #extract number of characters in sequence
@@ -12,24 +11,24 @@ mdVdist <- function(file,nperm=1000,verbose=T,plot=T){
   dna <- read.dna(file) #redundant read in for ape
   dna.dist <- dist.dna(dna,pairwise.deletion=T) #calculate dna distance (default model is k80)
   
-  #calculate % shared loci (shared/total in alignment) for all pairwise comparisons
+  #calculate % shared loci for all (unique) pairwise combinations of samples
   md.dist <- apply(combn(nrow(a),2),2,function(x) {  
     p <- c(a$seq[x[1]],a$seq[x[2]]) #select a pair
+    p <- gsub("N",1,p) #replace N with 1
+    p <- gsub("[^1]",0,p) #replace everything else with 0
     q <- strsplit(p,"") #split out each nucleotide
-    q <- lapply(q,function(e) gsub("N",1,e)) #replace N's w/1
-    q <- lapply(q,function(e) gsub("[^1]",0,e)) #replace everything else w/0
-    q <- lapply(q,function(e) as.numeric(e)) 
-    r <- q[[1]]+q[[2]]
+    q <- lapply(q,function(e) as.numeric(e)) #reformat to numeric
+    r <- q[[1]]+q[[2]] #add the pair of converted sequences
     miss.none <- length(r[which(r == 0)])
     miss.one <- length(r[which(r == 1)])
     miss.two <- length(r[which(r == 2)])
     if(verbose==T){
       print(x)
-      print(miss.one/(miss.none+miss.one))
+      print(miss.one/nchar)
     } 
-    c(miss.none/(length(r)),x)
+    c(miss.none/nchar,x)
   })
-  
+
   #reformat list output to a matrix.
   m <- matrix(NA,nrow = nrow(a),ncol = nrow(a))
   for(i in 1:ncol(md.dist)){
