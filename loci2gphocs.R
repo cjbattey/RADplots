@@ -6,10 +6,12 @@
 #write(output,"pathToOutputFileLocation")
 
 loci2gphocs <- function(infile){
+  library(R.utils)
   loci <- readLines(infile)
   a <- grep("//",loci)
   j <- 1
   output <- c(paste(length(a)),"")
+  pb <- ProgressBar(max=length(a),ticks=10,stepLength=100/length(a),newlineWhenDone=F)
   for (i in (1:length(a))){
     locus <- loci[j:(a[i]-1)]
     locus <- gsub(">","",locus)
@@ -22,6 +24,7 @@ loci2gphocs <- function(infile){
     header <- paste("locus",i," ",nsamples," ",(nchar+1),sep="")
     concat <- c(header,locus,"")
     output <- append(output,concat)
+    increase(pb)
   }
   output
 }

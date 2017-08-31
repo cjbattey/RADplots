@@ -7,6 +7,7 @@
 ##                spacing = Amount of white space left between bars, as a fraction of bar width. Defaults to 0. 
 ##                outline = color used for outline of bars (default is white).
 ##                cex=font scaling for labels. defaults to 0.75.
+##                names=vector of sample ID's. Defaults to input. For unlabeled plots, set names=NULL. Do not use anything other than default or NULL. 
 ##
 ##experimental:   color.matching = TRUE will attach colors to putative populations (requires pop.info=TRUE) for consistent 
 ##plotting across multiple runs. The cluster attached to a given population is taken to be that with the highest 
@@ -18,7 +19,9 @@
 #c("gold","forestgreen","magenta3","orangered","cornflowerblue","orange","sienna","dodgerblue4")
 #c(colors=brewer.pal(12,"Set3"))
 
-structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold","forestgreen","magenta3","orangered","cornflowerblue","orange","sienna","dodgerblue4"),color.matching=FALSE,spacing=0,outline='white',cex=0.75) {
+structurePlot <- function(strOutput,pop.order=FALSE,q.order=FALSE,pop.info=TRUE,
+                          colors=c("gold","forestgreen","magenta3","orangered","cornflowerblue","orange","sienna","dodgerblue4"),
+                          color.matching=FALSE,spacing=0,outline='white',cex=0.75,names=df$sample) {
   require(plyr);require(reshape);require(RColorBrewer)
   infile <- readLines(strOutput,warn=FALSE)
   a <- grep("Inferred ancestry of individuals:",infile)+2
@@ -30,6 +33,7 @@ structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold
   df <- df[2:ncol(df)]
   if (pop.info=="TRUE"){
     colnames(df) <- c("sample","percent.missing","pop","X",1:k)
+    df <- df[!is.na(colnames(df))] #if 90% intervals are included
     n.pops <- max(as.numeric(as.character(df$pop)))
   if (color.matching=="TRUE"){
     palette <- c(rep("NA",k))
@@ -46,18 +50,27 @@ structurePlot <- function(strOutput,pop.order=FALSE,pop.info=TRUE,colors=c("gold
    }
   if (pop.order=="TRUE"){
     df <- arrange(df,pop)
+    if(q.order==T){
+      df <- arrange(df,pop,`1`)
+    }
     a <- df[5:ncol(df)]
-    barplot(t(a),axes=FALSE,col=colors,border=outline,names=df$sample,cex.names=cex,las=2,main=lnml,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
+    barplot(t(a),axes=FALSE,col=colors,border=outline,names=names,cex.names=cex,las=2,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
   }
+    if(q.order==T){
+      df <- arrange(df,pop,`1`)
+    }
     a <- df[5:ncol(df)]
-    barplot(t(a),axes=FALSE,col=colors,border=outline,names=df$sample,cex.names=cex,las=2,main=lnml,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
-  }
+    barplot(t(a),axes=FALSE,col=colors,border=outline,names=names,cex.names=cex,las=2,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
+  } #end pop.info=T
+  
   else {
     colnames(df) <- c("sample","percent.missing","X",1:k)
+    if(q.order==T){
+      df <- arrange(df,`1`)
+    }
     a <- df[4:ncol(df)]
     n.pops <- k
-    names <- df$sample
-    barplot(t(a),axes=FALSE,col=colors,border=outline,names=names,cex.names=cex,las=2,main=lnml,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
+    barplot(t(a),axes=FALSE,col=colors,border=outline,names=names,cex.names=cex,las=2,cex.main=0.75,font.main=1,space=spacing,xpd=FALSE)
   }
 } 
 

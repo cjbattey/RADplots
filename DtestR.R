@@ -43,15 +43,16 @@ df$p1sp <- as.factor(gsub("\\[","",sapply(strsplit(as.character(df$P1),"_"),"[["
 df$p2sp <- as.factor(gsub("\\[","",sapply(strsplit(as.character(df$P2),"_"),"[[",1)))
 df$p3sp <- as.factor(gsub("\\[","",sapply(strsplit(as.character(df$P3),"_"),"[[",1)))
 df$Osp <- as.factor(gsub("\\[","",sapply(strsplit(as.character(df$O),"_"),"[[",1)))
-df$test <- as.factor(paste(df$p1sp,df$p2sp,df$p3sp,df$Osp))
+df$test <- as.factor(paste(df$p2sp,df$p3sp))
 
 #empty table to record summary stats
-table <- data.frame(test=character(),n.loci=numeric(),p.disc=numeric(),D.range=character(),Z.range=character(),
+table <- data.frame(test=character(),n.loci=numeric(),n.abba=numeric(),n.baba=numeric(),D.range=character(),Z.range=character(),
                     sig.permut=character())
 
 #loop over tests. Get min/max D & Z, average number of loci, average percent discordant loci, & number of significant tests.
 for (i in levels(df$test)){
   a <- subset(df,test==i)
+  a <- subset(a,a$pdisc*a$nloci > 100)
   test <- as.character(a$test[1])
   Dmin <- min(abs(a$D))
   Dmax <- max(abs(a$D))
@@ -62,13 +63,14 @@ for (i in levels(df$test)){
   n.permut <- nrow(a)
   #convert Z to p value, apply holm-bonferroni correction (n comparisons = n sample combinations per test)
   a$p.uncorrected <- 1-pnorm(a$Z)
-  a$p.corrected <- p.adjust(a$p.uncorrected,method="holm")
+  a$p.corrected <- p.adjust(a$p.uncorrected,method="fdr")
   #find number of significant sample permutations out of total permutations. Note numeric below gives one-tailed p value cutoff. 
-  sig.permut <- nrow(a[which(a$p.corrected < 0.005),])
+  sig.permut <- nrow(a[which(a$p.corrected < 0.05),])
   sig.fraction <- paste(sig.permut,"/",n.permut,sep="")
   n.loci <- mean(a$nloci)
-  p.disc <- mean(a$pdisc)
-  b <- data.frame(test,n.loci,p.disc,D.range,Z.range,sig.fraction)
+  n.abba <- round(mean(a$ABBA))
+  n.baba <- round(mean(a$BABA))
+  b <- data.frame(test,n.loci,n.abba,n.baba,Z.range,sig.fraction)
   table <- rbind(table,b)
 }
 

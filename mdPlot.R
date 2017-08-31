@@ -10,7 +10,10 @@ mdPlot <- function(file,arrange=T){
   d <- data.frame(sample=a$sample,md=c)
   if(arrange==F){
     barplot(d$md,names.arg=d$sample,las=2,cex.names=0.75,ylim=c(0,1))
-  }
-    d <- arrange(d,md)
+    return(d)
+  } else {
+    d <- arrange(d,desc(md))
     barplot(d$md,names.arg=d$sample,las=2,cex.names=0.75,ylim=c(0,1))
+    return(d)
+  }
 }
